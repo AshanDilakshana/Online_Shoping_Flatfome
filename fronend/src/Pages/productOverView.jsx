@@ -1,8 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { Loader } from "../../components/Loader";
-import ImageSlider from "../../components/imageSlider";
+import { Link, useParams } from "react-router-dom";
+import { Loader } from "../components/loader.jsx";
+import ImageSlider from "../components/imageSlider";
+import { addToCart } from "../util/cart";
+import toast from "react-hot-toast";
 
 export default function ProductOverview() {
   const { id } = useParams();
@@ -85,24 +87,37 @@ export default function ProductOverview() {
               </p>
             </div>
 
- {/* Call-to-Action Buttons */}
+            {/* Call-to-Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-3">
               <button
                 className={`w-full sm:w-auto px-10 py-3 text-sm sm:text-base font-medium text-white bg-acensed rounded-lg hover:bg-acensed-light transition-all duration-200 ${
                   product.stock <= 0 ? "opacity-50 cursor-not-allowed" : ""
                 }`}
                 disabled={product.stock <= 0}
+                onClick={() => {
+                  addToCart(product, 1);
+                  toast.success("Product added to cart");
+                }}
               >
                 Add to Cart
               </button>
-              <button
+              <Link to = {"/checkout"} state={[{
+								image : product.productImage[0],
+								productID : product.productID,
+								name : product.productName,
+								price : product.productPrice,
+								labelledPrice : product.labelledPrice,
+								quantity : 1
+							}]}
                 className={`w-full sm:w-auto px-12 py-3 text-sm sm:text-base font-medium text-white bg-accent rounded-lg hover:bg-acensed transition-all duration-200 ${
                   product.stock <= 0 ? "opacity-50 cursor-not-allowed" : ""
                 }`}
                 disabled={product.stock <= 0}
+                
               >
                 Buy Now
-              </button>
+              </Link>
+              
             </div>
           </div>
         </div>
