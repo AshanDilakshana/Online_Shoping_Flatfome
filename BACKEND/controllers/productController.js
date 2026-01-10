@@ -6,21 +6,44 @@ import { IsAddmin } from "./userController.js";
 export async function createproduct(req, res) {
   if (!IsAddmin(req))
     return res.status(403).json({
-      message: "user not found please logging or use admin loging",
+      message: "Unauthorized. Admin access required.",
     });
+  
   try {
+    console.log("productDatazzzzzzzzzzz",req.body);
     const productData = req.body;
 
-    const product = new Product(productData); // create new product
-    await product.save();
+    // Validate required fields
+    if (!productData.productID) {
+      return res.status(400).json({
+        message: "Product ID is required",
+      });
+    }
 
-    res.json({
-      message: "product created sucessfully ",
+    if (!productData.title ) {
+      return res.status(400).json({
+        message: "Product title/name is required",
+      });
+    }
+
+    if (!productData.price ) {
+      return res.status(400).json({
+        message: "Product price is required",
+      });
+    }
+
+    const product = new Product(productData); // create new product
+    const savedProduct = await product.save();
+
+    res.status(201).json({
+      message: "Product created successfully",
+      product: savedProduct,
     });
   } catch (err) {
-    console.error(err);
+    console.error('Error creating product:', err);
     res.status(500).json({
-      message: "product creation faild . ",
+      message: "Product creation failed. Please try again.",
+      error: err.message,
     });
   }
 }
