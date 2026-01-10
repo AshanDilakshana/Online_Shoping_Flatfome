@@ -16,6 +16,7 @@ const app = express();
 app.use(cors({})); //enable cors for all routes
 
 app.use(express.json()) //middle ware *ewana data tika piliwelata hadana ek karanne
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 app.use(   //authentication middleware
   (req, res, next) => { 
