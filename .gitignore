@@ -1,1 +1,4 @@
-BACKEND/.env
+BACKEND/.env
+config.bat
+node_modules
+.env

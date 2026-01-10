@@ -15,15 +15,34 @@ function createUser(req,res){
 
     user.save()
         .then(() => {
-            res.json({
+            res.status(201).json({
                 message: 'User created successfully',
                 
             });
         })
-        .catch( () => {
-            res.json({
-                message: 'Error creating user',
-                
+        .catch((error) => {
+            console.error('Error creating user:', error);
+            
+            // Check if it's a duplicate email error
+            if (error.code === 11000) {
+                return res.status(400).json({
+                    message: 'Email already exists. Please use a different email.',
+                    error: 'duplicate_email'
+                });
+            }
+            
+            // Check for validation errors
+            if (error.name === 'ValidationError') {
+                return res.status(400).json({
+                    message: 'Validation failed. Please check your input.',
+                    error: error.message
+                });
+            }
+            
+            // Generic error
+            res.status(500).json({
+                message: 'Error creating user. Please try again.',
+                error: error.message
             });
         });
 };
