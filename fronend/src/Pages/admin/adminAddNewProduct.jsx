@@ -22,11 +22,12 @@ export default function AdminAddNewProduct() {
       navigate("/login");
       return;
     }
-
+//mediaupload
     const uploadPromises = [];
     for (let i = 0; i < image.length; i++) {
       uploadPromises[i] = mediaUplode(image[i]);
     }
+
     try {
       const urls = await Promise.all(uploadPromises);
       const Alternative = altName.split(",");

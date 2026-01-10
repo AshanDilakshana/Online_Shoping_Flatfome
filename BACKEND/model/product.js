@@ -7,10 +7,10 @@ const productSchema = new mongoose.Schema({
     required: true,
   },
 
-  productName: {
+  // New field: title (can be used as display name)
+  title: {
     type: String,
-    required: true,
-     
+    required: false,
   },
 
   altanativeNames: {
@@ -18,28 +18,45 @@ const productSchema = new mongoose.Schema({
     default: [],
   },
 
-  productPrice: {
+  // New field: price (alias for productPrice, for frontend compatibility)
+  price: {
     type: Number,
-    required: true,
+    required: false,
   },
 
   LabledPrice: {
     type: Number,
-    required: true,
+    
   },
 
-  productDescription: {
+  // New field: description (alias for productDescription)
+  description: {
     type: String,
-    required: true,
+    required: false,
   },
 
   category: {
     type: String,
     required: true,
   },
-  stock: {
-    type: Number,
+
+  // New field: colors array
+  colors: {
+    type: [String],
+    default: [],
     required: true,
+  },
+
+  // New field: sizes array
+  sizes: {
+    type: [String],
+    default: [],
+    required: true,
+  },
+
+  stock: {
+    type: mongoose.Schema.Types.Mixed, // Supports both Number and Object { UK04: 10, UK06: 5 }
+    required: false,
     default: 0,
   },
 
@@ -47,9 +64,27 @@ const productSchema = new mongoose.Schema({
     type: [String],
     default: [],
     required: true,
-    default: ["https://picsum.photos/200/200?random=3"],
+    default: ["https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=2083&auto=format&fit=crop"],
+  },
+
+  // New field: fabric information
+  fabric: {
+    type: String,
+    required: false,
+  },
+
+  // New field: care instructions
+  care: {
+    type: [String],
+    default: ["please refer care label in the product"],
+  },
+
+  badge: {
+    type: String,
+    required: false,
   },
 });
 const product = mongoose.model("Product", productSchema);
 
 export default product;
+
